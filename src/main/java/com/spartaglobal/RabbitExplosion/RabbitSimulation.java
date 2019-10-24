@@ -7,9 +7,17 @@ public class RabbitSimulation /*extends TimerTask*/ {
     private int month;
     private List<IRabbit> femaleRabbits = new ArrayList<>();
     private List<IRabbit> maleRabbits = new ArrayList<>();
+    private List<IFox> femaleFoxs = new ArrayList<>();
+    private List<IFox> maleFoxs = new ArrayList<>();
     private int noOfNawMale;
     private int noOfNewFemale;
     private int totalNewRabbits;
+    private int totalRabbitsToEat;
+    private int femalesToEat;
+    private int malesToEat;
+    private int totalNewFoxs;
+    private int noOfNewFemaleFoxs;
+    private int noOfNewMaleFoxs;
 
 
     public RabbitSimulation(){
@@ -33,7 +41,16 @@ public class RabbitSimulation /*extends TimerTask*/ {
         LoopToMultiplyRabbits loopToMultiplyRabbits = new LoopToMultiplyRabbits();
         AddMaleRabbits addMaleRabbits = new AddMaleRabbits();
         AddFemaleRabbits addFemaleRabbits = new AddFemaleRabbits();
+        RabbitsToBeEaten rabbitsToBeEaten = new RabbitsToBeEaten();
+        GenderToEat genderToEat = new GenderToEat();
+        EatRabbit eatRabbit = new EatRabbit();
+        AdjustFoxAge adjustFoxAge = new AdjustFoxAge();
+        KillFox killFox = new KillFox();
+        LoopToMultiplyFoxs loopToMultiplyFoxs = new LoopToMultiplyFoxs();
+        GiveFoxGender giveFoxGender = new GiveFoxGender();
         int lenght = lenghtOfSimulation.setLength();
+        AddMaleFox addMaleFox = new AddMaleFox();
+        AddFemaleFox addFemaleFox = new AddFemaleFox();
         month =0;
         while(month < lenght){
             femaleRabbits = loopToAjdustAge.loopToAdjustAge(femaleRabbits, month);
@@ -50,9 +67,34 @@ public class RabbitSimulation /*extends TimerTask*/ {
             femaleRabbits = addFemaleRabbits.addFemaleRabbits(femaleRabbits, noOfNewFemale, month);
             femaleRabbits = killRabbit.killRabbit(femaleRabbits);
             maleRabbits = killRabbit.killRabbit(maleRabbits);
+            if(month == 6){
+                createInitialFox();
+            }
 
+            if (month >=6) {
+                if(month % 9 == 0){
+                    totalNewFoxs = loopToMultiplyFoxs.totalMultiplyFoxs(femaleFoxs,maleFoxs);
+                    noOfNewFemaleFoxs = giveFoxGender.giveFemaleGender(totalNewFoxs);
+                    noOfNewMaleFoxs = totalNewFoxs - noOfNewMaleFoxs;
+                    maleFoxs = addMaleFox.addMaleFoxs(maleFoxs,noOfNawMale,month);
+                    femaleFoxs = addFemaleFox.addFemaleFoxs(femaleFoxs,noOfNewFemale,month);
+                }
 
+                femaleFoxs = adjustFoxAge.loopToAdjustAge(femaleFoxs, month);
+                maleFoxs = adjustFoxAge.loopToAdjustAge(maleFoxs, month);
+                totalRabbitsToEat = rabbitsToBeEaten.rabbitsToBeEaten(maleFoxs, femaleFoxs);
+                femalesToEat = genderToEat.femalesToBeEaten(totalRabbitsToEat);
+                malesToEat = totalRabbitsToEat - femalesToEat;
+                femaleRabbits = eatRabbit.eatRabbits(femaleRabbits,femalesToEat);
+                maleRabbits = eatRabbit.eatRabbits(maleRabbits, malesToEat);
+                //System.out.println("Rabbits eaten in month " + month + " is " + totalRabbitsToEat);
+                totalNewFoxs = loopToMultiplyFoxs.totalMultiplyFoxs(femaleFoxs,maleFoxs);
+                noOfNewFemaleFoxs = giveFoxGender.giveFemaleGender(totalNewFoxs);
+                noOfNewMaleFoxs = totalNewFoxs - noOfNewMaleFoxs;
 
+                femaleFoxs = killFox.killFox(femaleFoxs);
+                maleFoxs = killFox.killFox(maleFoxs);
+            }
 
 
 
@@ -78,5 +120,13 @@ public class RabbitSimulation /*extends TimerTask*/ {
 
     }
 
+
+    public void createInitialFox(){
+        CreateFemaleFox createFemaleFox = new CreateFemaleFox();
+        CreateMaleFox createMaleFox = new CreateMaleFox();
+        femaleFoxs.add(createFemaleFox.createFemaleFox(month));
+        maleFoxs.add(createMaleFox.createMaleFox(month));
+
+    }
 
 }

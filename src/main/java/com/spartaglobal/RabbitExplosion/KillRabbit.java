@@ -7,7 +7,7 @@ public class KillRabbit {
     public List<IRabbit> killRabbit(List<IRabbit> rabbits)
     {
         for (int i = 0; i < rabbits.size() ; i++) {
-            if(rabbits.get(i).getAge() >= 3  ){
+            if(rabbits.get(i).getAge() >= 12 ){
                 rabbits.remove(i);
             }
 

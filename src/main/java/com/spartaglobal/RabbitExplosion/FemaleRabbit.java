@@ -17,9 +17,23 @@ public class FemaleRabbit extends Rabbit implements IFemale {
 
     @Override
     public int giveBirth() {
-        double noOfChildren = Math.random();
-        noOfChildren = noOfChildren *14 +1;
-        int retChildern = (int)noOfChildren;
+        boolean gettingPreg;
+        double willGetPreg = Math.random();
+        willGetPreg = willGetPreg *2;
+        int checker = (int)willGetPreg;
+        int retChildern = 0;
+        if(checker == 1){
+            gettingPreg = true;
+        }
+        else{
+            gettingPreg = false;
+        }
+
+        if(gettingPreg == true) {
+            double noOfChildren = Math.random();
+            noOfChildren = noOfChildren * 14;
+            retChildern = (int) noOfChildren;
+        }
         return retChildern;
     }
 }

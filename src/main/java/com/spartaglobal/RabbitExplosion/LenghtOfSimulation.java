@@ -4,7 +4,7 @@ public class LenghtOfSimulation {
 
     public int setLength(){
 
-        int lenght = 60;
+        int lenght = 181;
 
         return lenght;
 
